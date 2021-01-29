@@ -1,0 +1,9 @@
+#animals-graph{
+    height: 80vh;
+    background-color: #ff0000;
+    
+}
+
+#animals-graph .proto{
+    position: absolute;
+}
