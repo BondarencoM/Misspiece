@@ -1,6 +1,17 @@
-import { useEffect } from 'react'
-import { Row, Col, Container } from 'react-bootstrap'
+import { useEffect, useRef } from 'react'
+import { Row, Col } from 'react-bootstrap'
+import CytoscapeComponent from 'react-cytoscapejs'
+import Cytoscape from 'cytoscape'
+import CytoscapeCola from 'cytoscape-cola'
+import CytoscapeSpread from 'cytoscape-spread'
+import CoseBilkent from 'cytoscape-cose-bilkent'
 import './style.css'
+import styleVars from './styleVars.json'
+import elements from './animalsInfo'
+
+Cytoscape.use(CytoscapeCola)
+Cytoscape.use(CytoscapeSpread)
+Cytoscape.use(CoseBilkent)
 
 const animals = {
     Griffon: {},
@@ -35,36 +46,85 @@ const protos = {
 
 export function AnimalsGraph() {
 
-    useEffect(() => {
-        const main = document.querySelector('#animals-graph')
-        const protos = main.querySelectorAll('.proto')
-        const center = {
-            x: main.clientWidth / 2,
-            y: main.clientHeight / 2
-        }
+    let cy = useRef(null)
 
-        const radius = main.clientHeight / 2 - 100
-        for (let i = 0; i < protos.length; i++) {
-            const x = center.x + (radius * Math.sin(2 * Math.PI * i / protos.length)) + 'px'
-            const y = center.y - radius * (1 - Math.cos(2 * Math.PI * i / protos.length)) + 'px'
-            console.log({ x, y })
-            protos[i].style.left = x
-            protos[i].style.bottom = y
+    function clearHighlights() {
+        for (let node of cy.current.$('.highlighted'))
+            node.removeClass('highlighted')
+    }
+
+    function onNodeClick(e) {
+        clearHighlights()
+        for (let element of e.target.neighbourhood()) {
+            element.addClass('highlighted')
         }
+    }
+
+    function onBackgroundClick() {
+        clearHighlights()
+    }
+
+    useEffect(() => {
+        cy.current.on('click', (e) => {
+            if (e.target === cy.current)
+                onBackgroundClick(e)
+            else if (e.target.isNode())
+                onNodeClick(e)
+        })
     })
 
+
+    let layout = {}
+    layout = { name: "cose", nodeDimensionsIncludeLabels: true }
+    // layout = {
+    //     name: "concentric", minNodeSpacing: 50, levelWidth: () => 1, concentric: n => {
+    //         if (n.data('id') === 'Human')
+    //             return 100
+    //         else if (n.edgesWith('#Human').isEdge())
+    //             return 70
+    //         else if (n.data('type') === 'Proto')
+    //             return 1
+    //         return 25 - n.degree()
+    //     }
+    // }
+    // layout = { name: "cola", componentSpacing: 200 }
+    // layout = { name: "spread", }
+    // layout = { name: "breadthfirst", circle: true, spacingFactor: 1.25 }
+    layout = { name: "cose-bilkent", edgeElasticity: 0.1, nodeRepulsion: 6000, nodeDimensionsIncludeLabels: true }
+
     return (
-        <Container>
-            <br />
-            <br />
-            <Row className="justify-content-center">
-                <Col>
-                    <div id="animals-graph" >
-                        {Object.values(protos).map(p => (<div className='proto' key={p.name}> {p.name} </div>))}
-                    </div>
-                </Col>
-            </Row>
-        </Container >
+        <Row className="justify-content-center">
+            <Col>
+                <CytoscapeComponent elements={elements} layout={layout} style={{ width: '100vw', height: '100vh' }}
+                    cy={ref => cy.current = ref}
+                    stylesheet={[
+                        {
+                            selector: 'node',
+                            style: {
+                                label: elem => elem.data('label') || elem.data('id'),
+                                ...styleVars.node,
+                            },
+                        },
+                        {
+                            selector: 'node[type="Proto"]',
+                            style: styleVars.protoNode
+                        },
+                        {
+                            selector: 'node[type="Animal"]',
+                            style: styleVars.animalNode
+                        },
+                        {
+                            selector: 'node.highlighted',
+                            style: styleVars.primaryHighlightNode
+                        },
+                        {
+                            selector: 'edge.highlighted',
+                            style: styleVars.primaryHighlightedEdge
+                        }
+                    ]}
+                />
+            </Col>
+        </Row>
     )
 }
 

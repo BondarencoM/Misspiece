@@ -1,0 +1,31 @@
+{
+    "node": {
+        "text-valign": "center",
+        "text-halign": "center",
+        "font-weight": "bold",
+        "text-wrap": "wrap",
+        "text-max-width": "100",
+        "font-size": 84,
+        "width": 350,
+        "height": 350
+    },
+    "protoNode": {
+        "backgroundColor": "blue",
+        "background-opacity": 0.3
+    },
+    "animalNode": {
+        "backgroundColor": "red",
+        "background-opacity": 0.3
+    },
+    "primaryHighlightNode": {
+        "backgroundColor": "yellow",
+        "background-opacity": 0.9,
+        "height": 350,
+        "width": 350
+    },
+    "primaryHighlightedEdge": {
+        "line-color": "yellow",
+        "width": 10,
+        "opacity": 1
+    }
+}
