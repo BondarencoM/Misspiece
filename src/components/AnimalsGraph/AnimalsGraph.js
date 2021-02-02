@@ -71,6 +71,13 @@ export function AnimalsGraph() {
             else if (e.target.isNode())
                 onNodeClick(e)
         })
+        cy.current.on('mouseover', 'node', function (e) {
+            console.log(cy.current.container())
+            cy.current.container().style['cursor'] = 'pointer'
+        })
+        cy.current.on('mouseout', 'node', function (e) {
+            cy.current.container().style['cursor'] = 'default'
+        })
     })
 
 
