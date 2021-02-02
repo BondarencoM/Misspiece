@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/Misspiece/static/css/main.191f95ff.chunk.css",
-    "main.js": "/Misspiece/static/js/main.fd8b7c0c.chunk.js",
-    "main.js.map": "/Misspiece/static/js/main.fd8b7c0c.chunk.js.map",
+    "main.js": "/Misspiece/static/js/main.09e54de5.chunk.js",
+    "main.js.map": "/Misspiece/static/js/main.09e54de5.chunk.js.map",
     "runtime-main.js": "/Misspiece/static/js/runtime-main.44cde712.js",
     "runtime-main.js.map": "/Misspiece/static/js/runtime-main.44cde712.js.map",
     "static/css/2.150d169a.chunk.css": "/Misspiece/static/css/2.150d169a.chunk.css",
@@ -20,6 +20,6 @@
     "static/css/2.150d169a.chunk.css",
     "static/js/2.7f27c75d.chunk.js",
     "static/css/main.191f95ff.chunk.css",
-    "static/js/main.fd8b7c0c.chunk.js"
+    "static/js/main.09e54de5.chunk.js"
   ]
 }
