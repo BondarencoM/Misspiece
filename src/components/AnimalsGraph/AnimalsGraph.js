@@ -1,5 +1,4 @@
 import { useEffect, useRef } from 'react'
-import { Row, Col } from 'react-bootstrap'
 import CytoscapeComponent from 'react-cytoscapejs'
 import Cytoscape from 'cytoscape'
 import CytoscapeCola from 'cytoscape-cola'
