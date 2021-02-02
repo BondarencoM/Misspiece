@@ -27,5 +27,8 @@
         "line-color": "yellow",
         "width": 10,
         "opacity": 1
+    },
+    "nodeSelected": {
+        "background-opacity": 0.6
     }
 }

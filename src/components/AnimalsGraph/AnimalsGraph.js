@@ -13,37 +13,6 @@ Cytoscape.use(CytoscapeCola)
 Cytoscape.use(CytoscapeSpread)
 Cytoscape.use(CoseBilkent)
 
-const animals = {
-    Griffon: {},
-    Sphinx: {},
-    Harpy: {},
-    Minotaur: {},
-    Lamssu: {},
-}
-
-const protos = {
-    Human: {
-        name: 'Human',
-        animals: [animals.Sphinx, animals.Harpy, animals.Minotaur, animals.Lamssu]
-    },
-    Bird: {
-        name: 'Bird',
-        animals: [animals.Harpy, animals.Lamssu],
-    },
-    Bull: {
-        name: 'Bull',
-        animals: [animals.Lamssu, animals.Minotaur],
-    },
-    Lion: {
-        name: 'Lion',
-        animals: [animals.Griffon, animals.Sphinx]
-    },
-    Some: {
-        name: 'Some',
-    },
-}
-
-
 export function AnimalsGraph() {
 
     let cy = useRef(null)
@@ -97,41 +66,41 @@ export function AnimalsGraph() {
     // layout = { name: "cola", componentSpacing: 200 }
     // layout = { name: "spread", }
     // layout = { name: "breadthfirst", circle: true, spacingFactor: 1.25 }
-    layout = { name: "cose-bilkent", edgeElasticity: 0.1, nodeRepulsion: 6000, nodeDimensionsIncludeLabels: true }
+    layout = { name: "cose-bilkent", edgeElasticity: 0.05, nodeRepulsion: 10000, idealEdgeLength: 250, nodeDimensionsIncludeLabels: true }
 
     return (
-        <Row className="justify-content-center">
-            <Col>
-                <CytoscapeComponent elements={elements} layout={layout} style={{ width: '100vw', height: '100vh' }}
-                    cy={ref => cy.current = ref}
-                    stylesheet={[
-                        {
-                            selector: 'node',
-                            style: {
-                                label: elem => elem.data('label') || elem.data('id'),
-                                ...styleVars.node,
-                            },
-                        },
-                        {
-                            selector: 'node[type="Proto"]',
-                            style: styleVars.protoNode
-                        },
-                        {
-                            selector: 'node[type="Animal"]',
-                            style: styleVars.animalNode
-                        },
-                        {
-                            selector: 'node.highlighted',
-                            style: styleVars.primaryHighlightNode
-                        },
-                        {
-                            selector: 'edge.highlighted',
-                            style: styleVars.primaryHighlightedEdge
-                        }
-                    ]}
-                />
-            </Col>
-        </Row>
+        <CytoscapeComponent elements={elements} layout={layout} style={{ width: '100%', height: '100%' }}
+            cy={ref => cy.current = ref}
+            stylesheet={[
+                {
+                    selector: 'node',
+                    style: {
+                        label: elem => elem.data('label') || elem.data('id'),
+                        ...styleVars.node,
+                    },
+                },
+                {
+                    selector: 'node[type="Proto"]',
+                    style: styleVars.protoNode
+                },
+                {
+                    selector: 'node[type="Animal"]',
+                    style: styleVars.animalNode
+                },
+                {
+                    selector: 'node.highlighted',
+                    style: styleVars.primaryHighlightNode
+                },
+                {
+                    selector: 'node:selected',
+                    style: styleVars.nodeSelected
+                },
+                {
+                    selector: 'edge.highlighted',
+                    style: styleVars.primaryHighlightedEdge
+                },
+            ]}
+        />
     )
 }
 
