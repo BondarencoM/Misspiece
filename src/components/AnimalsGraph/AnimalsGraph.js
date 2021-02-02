@@ -13,7 +13,28 @@ Cytoscape.use(CytoscapeCola)
 Cytoscape.use(CytoscapeSpread)
 Cytoscape.use(CoseBilkent)
 
-export function AnimalsGraph() {
+
+const layouts = {
+    empty: {},
+    cose: { name: "cose", nodeDimensionsIncludeLabels: true },
+    concentric: {
+        name: "concentric", minNodeSpacing: 50, levelWidth: () => 1, concentric: n => {
+            if (n.data('id') === 'Human')
+                return 100
+            else if (n.edgesWith('#Human').isEdge())
+                return 70
+            else if (n.data('type') === 'Proto')
+                return 1
+            return 25 - n.degree()
+        }
+    },
+    cola: { name: "cola", componentSpacing: 200 },
+    spread: { name: "spread", },
+    dreamcatcher: { name: "breadthfirst", circle: true, spacingFactor: 1.25 },
+    cellular: { name: "cose-bilkent", edgeElasticity: 0.05, nodeRepulsion: 10000, idealEdgeLength: 250, nodeDimensionsIncludeLabels: true }
+}
+
+export function AnimalsGraph({ layout }) {
 
     let cy = useRef(null)
 
@@ -49,27 +70,8 @@ export function AnimalsGraph() {
         })
     })
 
-
-    let layout = {}
-    layout = { name: "cose", nodeDimensionsIncludeLabels: true }
-    // layout = {
-    //     name: "concentric", minNodeSpacing: 50, levelWidth: () => 1, concentric: n => {
-    //         if (n.data('id') === 'Human')
-    //             return 100
-    //         else if (n.edgesWith('#Human').isEdge())
-    //             return 70
-    //         else if (n.data('type') === 'Proto')
-    //             return 1
-    //         return 25 - n.degree()
-    //     }
-    // }
-    // layout = { name: "cola", componentSpacing: 200 }
-    // layout = { name: "spread", }
-    // layout = { name: "breadthfirst", circle: true, spacingFactor: 1.25 }
-    layout = { name: "cose-bilkent", edgeElasticity: 0.05, nodeRepulsion: 10000, idealEdgeLength: 250, nodeDimensionsIncludeLabels: true }
-
     return (
-        <CytoscapeComponent elements={elements} layout={layout} style={{ width: '100%', height: '100%' }}
+        <CytoscapeComponent elements={elements} layout={layouts[layout]} style={{ width: '100%', height: '100%' }}
             cy={ref => cy.current = ref}
             stylesheet={[
                 {

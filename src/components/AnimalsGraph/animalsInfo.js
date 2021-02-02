@@ -1,4 +1,4 @@
-export default [
+const elements = [
     { data: { id: 'Human', type: 'Proto' } },
     { data: { id: 'Bull', type: 'Proto' } },
     { data: { id: 'Bird', type: 'Proto' } },
@@ -216,3 +216,5 @@ export default [
     { data: { id: 'BirdHippalectryon', source: "Bird", target: "Hippalectryon", } },
 
 ]
+
+export default elements
