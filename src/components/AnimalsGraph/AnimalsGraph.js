@@ -16,7 +16,7 @@ Cytoscape.use(CoseBilkent)
 const layouts = {
     empty: {},
     cose: { name: "cose", nodeDimensionsIncludeLabels: true },
-    concentric: {
+    dreamcatcher: {
         name: "concentric", minNodeSpacing: 50, levelWidth: () => 1, concentric: n => {
             if (n.data('id') === 'Human')
                 return 100
@@ -29,7 +29,8 @@ const layouts = {
     },
     cola: { name: "cola", componentSpacing: 200 },
     spread: { name: "spread", },
-    dreamcatcher: { name: "breadthfirst", circle: true, spacingFactor: 1.25 },
+    breadthfirstCircle: { name: "breadthfirst", circle: true, spacingFactor: 1.25 },
+    breadthfirst: { name: "breadthfirst", circle: false, nodeDimensionsIncludeLabels: true },
     cellular: { name: "cose-bilkent", edgeElasticity: 0.05, nodeRepulsion: 10000, idealEdgeLength: 250, nodeDimensionsIncludeLabels: true }
 }
 
@@ -38,15 +39,32 @@ export function AnimalsGraph({ layout }) {
     let cy = useRef(null)
 
     function clearHighlights() {
-        for (let node of cy.current.$('.highlighted'))
-            node.removeClass('highlighted')
+        cy.current.remove('*')
+        cy.current.add(elements)
+        cy.current.layout(layouts[layout]).run()
     }
 
     function onNodeClick(e) {
-        clearHighlights()
+        // clearHighlights()
+
+        let vecinity = cy.current.collection()
+
         for (let element of e.target.neighbourhood()) {
-            element.addClass('highlighted')
+            let secondVecinity = element.neighbourhood()
+            vecinity = vecinity.union(element)
+            vecinity = vecinity.union(secondVecinity)
+            if (e.target.data('type') === 'Animal')
+                for (let secondNeighbour of secondVecinity)
+                    vecinity = vecinity.union(secondNeighbour.neighbourhood())
+
         }
+        vecinity = vecinity.union(e.target)
+        cy.current.remove('*')
+        console.log(vecinity.length, vecinity.map(e => e.data()))
+        cy.current.add(vecinity)
+
+        cy.current.layout(layouts.breadthfirst).run()
+
     }
 
     function onBackgroundClick() {
@@ -61,7 +79,6 @@ export function AnimalsGraph({ layout }) {
                 onNodeClick(e)
         })
         cy.current.on('mouseover', 'node', function (e) {
-            console.log(cy.current.container())
             cy.current.container().style['cursor'] = 'pointer'
         })
         cy.current.on('mouseout', 'node', function (e) {
